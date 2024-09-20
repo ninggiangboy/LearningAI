@@ -2,8 +2,7 @@
 
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { FileBase64 } from "./types";
-
-export async function generate({
+export async function generateScript({
   title,
   prompt,
   numOfSlides,
@@ -16,15 +15,25 @@ export async function generate({
 }) {
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
   const fileParts = files.map(fileToGenerativePart);
   const scriptPrompt = getGenerateScriptPrompt(title, prompt, numOfSlides);
-  const scriptResponse = await model.generateContent([
-    scriptPrompt,
-    ...fileParts,
-  ]);
-  const script = scriptResponse.response.text();
-  console.log("script", script);
+  const result = await model.generateContent([scriptPrompt, ...fileParts]);
+  return result.response.text();
+}
+
+export async function generateSlides({
+  title,
+  prompt,
+  numOfSlides,
+  script,
+}: {
+  title: string;
+  prompt?: string;
+  numOfSlides?: number;
+  script: string;
+}) {
+  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
   const content = getGenerateSlidesPrompt(
     title,
     script,
@@ -33,10 +42,7 @@ export async function generate({
     numOfSlides
   );
   const result = await model.generateContent(content);
-  return {
-    script: script,
-    slides: result.response.text(),
-  };
+  return result.response.text();
 }
 
 function fileToGenerativePart(file: FileBase64) {

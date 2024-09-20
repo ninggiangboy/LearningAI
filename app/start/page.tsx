@@ -26,7 +26,7 @@ import {
 } from "@/components/extension/file-upload";
 import { LoadingButton } from "@/components/extension/loading-button";
 import SlideArtcle from "@/components/slide-article";
-import { generate } from "@/lib/actions";
+import { generateScript, generateSlides } from "@/lib/actions";
 import { Input } from "@/components/ui/input";
 import { generateFormSchema, GenerateFormValues } from "@/lib/schema";
 import { FileBase64 } from "@/lib/types";
@@ -66,12 +66,20 @@ export default function Start() {
     try {
       const { files, ...otherValues } = values;
       const fileContents = await filesToBase64(files);
-      const { script: script1, slides: slides1 } = await generate({
+      // const { script: script1, slides: slides1 } = await generate({
+      //   ...otherValues,
+      //   files: fileContents,
+      // });
+      const scriptResponse = await generateScript({
         ...otherValues,
         files: fileContents,
       });
-      setScript(script1);
-      setSlides(slides1);
+      setScript(scriptResponse);
+      const slidesResponse = await generateSlides({
+        ...otherValues,
+        script: scriptResponse,
+      });
+      setSlides(slidesResponse);
     } catch (error) {
       console.log(error);
       setError("An error occurred");
