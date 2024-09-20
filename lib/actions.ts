@@ -85,7 +85,8 @@ function getGenerateScriptPrompt(
   Summarize the content of the document and generate a script for a lecture. 
   The lecture should be complete and main ideas and it' parts should be developed in detail 
   (don't just list) in the most appropriate Vietnamese with title ${title}.
-  If the content be convert to slides, it will be contain ${numOfSlides} slides.
+  If the content be convert to slides, it will be contain ${numOfSlides} slides 
+  (But this is not a request for slides, it's a request for a script, dont mention about slides in the script).
   The script should be written in a formal tone and be structured as a lecture.
   ${optionalRequest ? `And more request is: ${optionalRequest}` : ""}`;
   return prompt;
