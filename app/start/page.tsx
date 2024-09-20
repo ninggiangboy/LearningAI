@@ -45,8 +45,8 @@ export default function Start() {
   const [script, setScript] = useState<string | null>(null);
   const [slides, setSlides] = useState<string | null>(null);
   const dropZoneConfig = {
-    maxFiles: 5,
-    maxSize: 1024 * 1024 * 4,
+    maxFiles: 3,
+    maxSize: 1024 * 1024 * 2,
     multiple: true,
   };
 
