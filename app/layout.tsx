@@ -73,11 +73,13 @@ export default function RootLayout({
     >
       <html lang="en">
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased max-w-screen-xl mx-auto px-4 md:px-8`}
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          <Navbar />
-          <main>{children}</main>
-          <Footer />
+          <div className="mx-auto px-4 md:px-8">
+            <Navbar />
+            <main>{children}</main>
+            <Footer />
+          </div>
         </body>
       </html>
     </ClerkProvider>

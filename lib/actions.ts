@@ -1,7 +1,34 @@
 "use server";
 
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { FileBase64 } from "./types";
+import { FileBase64, QuizOuput } from "./types";
+
+export async function generateQuiz({
+  title,
+  prompt,
+  numOfQuiz,
+  typeOfQuiz,
+  files,
+}: {
+  title: string;
+  prompt?: string;
+  numOfQuiz?: number;
+  typeOfQuiz: "multiple_choice" | "true_false" | "both";
+  files: FileBase64[];
+}) {
+  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+  const fileParts = files.map(fileToGenerativePart);
+  const quizPrompt = getGenerateQuizPrompt(
+    title,
+    prompt,
+    numOfQuiz,
+    typeOfQuiz
+  );
+  const result = await model.generateContent([quizPrompt, ...fileParts]);
+  return JSON.parse(result.response.text()) as QuizOuput[];
+}
+
 export async function generateScript({
   title,
   prompt,
@@ -76,20 +103,47 @@ function getFileMimeType(name: string) {
   }
 }
 
+function getGenerateQuizPrompt(
+  title: string,
+  optionalRequest?: string,
+  numOfQuiz: number = 30,
+  typeOfQuiz: "multiple_choice" | "true_false" | "both" = "both"
+) {
+  const type =
+    typeOfQuiz === "both" ? "both multiple choice and true/false" : typeOfQuiz;
+  return `
+  Create a quiz in Vietnamese with the title "${title}" that contains ${numOfQuiz} questions. 
+  Flow the document, the quiz can only be generated based on the content of the document and should not include any external information (you can use the prompt to provide additional answer of questions).
+  The quiz should be ${type} type. 
+  The questions should be clear, concise, and focus on the most important points of the document. 
+  The response must be is a json object (but must be pain text, must not have \`\`\`markdown) with the following structure:
+  "
+  [
+    {
+      question: string;
+      choices: string[];
+      answerIndex: number[];
+    }
+  ]
+  "
+  Note: index start from 0,
+  Please dont include the answer in the question, the answer should be in the answerIndex array.
+  Please dont add any additional information in the response, only the question itself.
+  ${optionalRequest ? `Additional request: ${optionalRequest}` : ""}`;
+}
+
 function getGenerateScriptPrompt(
   title: string,
   optionalRequest?: string,
   numOfSlides: number = 10
 ) {
-  const prompt = `
-  Summarize the content of the document and generate a script for a lecture. 
-  The lecture should be complete and main ideas and it' parts should be developed in detail 
-  (don't just list) in the most appropriate Vietnamese with title ${title}.
-  If the content be convert to slides, it will be contain ${numOfSlides} slides 
-  (But this is not a request for slides, it's a request for a script, dont mention about slides in the script).
-  The script should be written in a formal tone and be structured as a lecture.
-  ${optionalRequest ? `And more request is: ${optionalRequest}` : ""}`;
-  return prompt;
+  return `
+    Summarize the key points of the document and generate a script for a lecture in Vietnamese with the title "${title}". 
+    The script should develop the main ideas with sufficient detail, but focus only on the most important points to maintain clarity and conciseness. 
+    The content should be structured logically and kept within the equivalent content of approximately ${numOfSlides} slides.
+    The tone should be formal, suitable for an academic setting.
+    ${optionalRequest ? `Additional request: ${optionalRequest}` : ""}
+  `;
 }
 
 function getGenerateSlidesPrompt(

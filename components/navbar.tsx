@@ -5,13 +5,39 @@ import { useState } from "react";
 import Image from "next/image";
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuTrigger,
+} from "./ui/navigation-menu";
+import React from "react";
+import { cn } from "@/lib/utils";
 
 const Navbar = () => {
   const [state, setState] = useState(false);
 
   const navigation = [
-    // { title: 'Testimonials', path: '#testimonials' },
-    { title: "Homepage", path: "/" },
+    { title: "Home", path: "/" },
+    { title: "About", path: "/" },
+    { title: "Pricing", path: "/" },
+    { title: "Contact", path: "/" },
+  ];
+
+  const components = [
+    {
+      title: "Slides Generator",
+      href: "/slides",
+      description:
+        "For sighted users to preview content available behind a link.",
+    },
+    {
+      title: "Quiz Generator",
+      href: "/quiz",
+      description:
+        "For sighted users to preview content available behind a link.",
+    },
   ];
 
   const handleNavMenu = () => {
@@ -20,7 +46,7 @@ const Navbar = () => {
   };
 
   return (
-    <header>
+    <header className="container">
       <nav
         className={`bg-white w-full md:static md:text-sm ${
           state ? "fixed z-10 h-full" : ""
@@ -76,6 +102,26 @@ const Navbar = () => {
             }`}
           >
             <ul className="text-gray-700 justify-end items-center space-y-6 md:flex md:space-x-6 md:space-y-0 md:text-gray-600 md:font-medium">
+              <li>
+                <NavigationMenu>
+                  <NavigationMenuItem>
+                    <NavigationMenuTrigger>App</NavigationMenuTrigger>
+                    <NavigationMenuContent>
+                      <ul className="grid w-[200px] gap-3 p-4 md:w-[300px] grid-cols-1 lg:w-[400px]">
+                        {components.map((component) => (
+                          <ListItem
+                            key={component.title}
+                            title={component.title}
+                            href={component.href}
+                          >
+                            {component.description}
+                          </ListItem>
+                        ))}
+                      </ul>
+                    </NavigationMenuContent>
+                  </NavigationMenuItem>
+                </NavigationMenu>
+              </li>
               {navigation.map((item, idx) => {
                 return (
                   <li key={idx} className="duration-150 hover:text-gray-900">
@@ -85,14 +131,6 @@ const Navbar = () => {
                   </li>
                 );
               })}
-              <li>
-                <Link
-                  href="/start"
-                  className="block font-medium text-sm text-white bg-gray-800 hover:bg-gray-600 active:bg-gray-900 md:inline py-2.5 px-4 text-center rounded-lg duration-150"
-                >
-                  Generate learning resources
-                </Link>
-              </li>
               <li>
                 <nav className="flex items-center">
                   <SignedOut>
@@ -114,3 +152,29 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
+const ListItem = React.forwardRef<
+  React.ElementRef<"a">,
+  React.ComponentPropsWithoutRef<"a">
+>(({ className, title, children, ...props }, ref) => {
+  return (
+    <li>
+      <NavigationMenuLink asChild>
+        <a
+          ref={ref}
+          className={cn(
+            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+            className
+          )}
+          {...props}
+        >
+          <div className="text-sm font-medium leading-none">{title}</div>
+          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+            {children}
+          </p>
+        </a>
+      </NavigationMenuLink>
+    </li>
+  );
+});
+ListItem.displayName = "ListItem";
