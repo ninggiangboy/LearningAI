@@ -114,7 +114,7 @@ function getGenerateQuizPrompt(
   return `
   Create a quiz in Vietnamese with the title "${title}" that contains ${numOfQuiz} questions. 
   Flow the document, the quiz can only be generated based on the content of the document and should not include any external information (you can use the prompt to provide additional answer of questions).
-  The quiz should be ${type} type. 
+  The answers should be in the form of ${type} questions.
   The questions should be clear, concise, and focus on the most important points of the document. 
   The response must be is a json object (but must be pain text, must not have \`\`\`markdown) with the following structure:
   "
