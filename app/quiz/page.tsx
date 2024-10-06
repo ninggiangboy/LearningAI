@@ -1,10 +1,12 @@
 "use client";
 
+import { LoadingButton } from "@/components/extension/loading-button";
 import FormQuizPrompt from "@/components/form-quiz";
 import Quiz from "@/components/quiz";
 import { generateQuiz } from "@/lib/actions";
 import { generateQuizFormSchema } from "@/lib/schema";
 import { FileBase64, QuizOuput } from "@/lib/types";
+import { Download } from "lucide-react";
 import { useState } from "react";
 import { z } from "zod";
 
@@ -53,6 +55,51 @@ export default function QuizPage() {
       name: files[i].name,
     })) as FileBase64[];
   };
+
+  const downloadQuiz = () => {
+    console.log("Downloading quiz...");
+
+    if (!quiz) {
+      console.error("No quiz data available");
+      setError("No quiz data available to download");
+      return;
+    }
+
+    try {
+      // Convert quiz data to Quizlet format
+      const quizletFormat = quiz
+        .map(
+          (item) => `
+${item.question}
+${item.choices
+  .map((choice, index) => `${index + 1}. ${choice}`)
+  .join("\n")}---${item.choices
+            .filter((_, index) => item.answerIndex.includes(index))
+            .join("\n")}
+        `
+        )
+        .join("----");
+
+      // Create a Blob with the formatted data
+      const blob = new Blob([quizletFormat], { type: "text/plain" });
+
+      // Create a download link
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "quizlet_import.txt";
+
+      // Append to the document, trigger click, and clean up
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Error downloading quiz:", error);
+      setError("Error downloading quiz");
+    }
+  };
+
   return (
     <div className="flex justify-center items-center flex-col w-full lg:p-0 p-4 mb-0">
       <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-5 gap-6 md:gap-12 mt-10">
@@ -63,6 +110,14 @@ export default function QuizPage() {
             onSubmit={handleSubmit}
             error={error}
           />
+          {quiz && !isLoading && (
+            <div className="grid grid-cols-1 gap-3 mt-4">
+              <LoadingButton onClick={() => downloadQuiz()}>
+                <Download className="mr-2" />
+                Export to Quizlet
+              </LoadingButton>
+            </div>
+          )}
         </div>
         <div className="md:col-span-3">{quiz && <Quiz data={quiz} />}</div>
       </div>

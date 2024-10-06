@@ -5,7 +5,12 @@ import { Download } from "lucide-react";
 import { useState } from "react";
 import { LoadingButton } from "@/components/extension/loading-button";
 import SlideArtcle from "@/components/slide-article";
-import { generateScript, generateSlides } from "@/lib/actions";
+import {
+  convertToDocx,
+  convertToPptx,
+  generateScript,
+  generateSlides,
+} from "@/lib/actions";
 import { generateSlidesFormSchema } from "@/lib/schema";
 import { FileBase64 } from "@/lib/types";
 import ScriptArticle from "@/components/script-article";
@@ -74,6 +79,51 @@ export default function Slides() {
     })) as FileBase64[];
   };
 
+  const downloadScript = async () => {
+    console.log("Downloading script...");
+
+    try {
+      const docxContent = await convertToDocx(script!);
+      const blob = new Blob([Buffer.from(docxContent, "base64")], {
+        type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "script.docx";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Error downloading script:", error);
+      setError("Error downloading script");
+    }
+  };
+
+  const downloadSlides = async () => {
+    console.log("Downloading slides...");
+
+    try {
+      const pptxContent = await convertToPptx(slides!);
+      console.log(pptxContent);
+      const blob = new Blob([Buffer.from(pptxContent, "base64")], {
+        type: "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+      });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "slides.pptx";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Error downloading slides:", error);
+      setError("Error downloading slides");
+    }
+  };
+
   return (
     <div className="flex justify-center items-center flex-col w-full lg:p-0 p-4 mb-0">
       <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-5 gap-6 md:gap-12 mt-10">
@@ -85,18 +135,14 @@ export default function Slides() {
             error={error}
           />
           {slides && script && !isLoading && (
-            <div className="grid grid-cols-3 gap-3 mt-4">
-              <LoadingButton>
+            <div className="grid grid-cols-2 gap-3 mt-4">
+              <LoadingButton onClick={() => downloadScript()}>
                 <Download className="mr-2" />
                 Script (docs)
               </LoadingButton>
-              <LoadingButton>
+              <LoadingButton onClick={() => downloadSlides()}>
                 <Download className="mr-2" />
                 Slides (pptx)
-              </LoadingButton>
-              <LoadingButton>
-                <Download className="mr-2" />
-                Slides (pdf)
               </LoadingButton>
             </div>
           )}

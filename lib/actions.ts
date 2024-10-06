@@ -2,6 +2,10 @@
 
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { FileBase64, QuizOuput } from "./types";
+import { exec } from "child_process";
+import { join } from "path";
+import { readFile, writeFile } from "fs/promises";
+import { tmpdir } from "os";
 
 export async function generateQuiz({
   title,
@@ -32,18 +36,17 @@ export async function generateQuiz({
 export async function generateScript({
   title,
   prompt,
-  numOfSlides,
   files,
 }: {
   title: string;
   prompt?: string;
-  numOfSlides?: number;
+  // numOfSlides?: number;
   files: FileBase64[];
 }) {
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
   const fileParts = files.map(fileToGenerativePart);
-  const scriptPrompt = getGenerateScriptPrompt(title, prompt, numOfSlides);
+  const scriptPrompt = getGenerateScriptPrompt(title, prompt);
   const result = await model.generateContent([scriptPrompt, ...fileParts]);
   return result.response.text();
 }
@@ -114,7 +117,7 @@ function getGenerateQuizPrompt(
   return `
   Create a quiz in Vietnamese with the title "${title}" that contains ${numOfQuiz} questions. 
   Flow the document, the quiz can only be generated based on the content of the document and should not include any external information (you can use the prompt to provide additional answer of questions).
-  The quiz should be ${type} type. 
+  The quiz must be in type of ${type}
   The questions should be clear, concise, and focus on the most important points of the document. 
   The response must be is a json object (but must be pain text, must not have \`\`\`markdown) with the following structure:
   "
@@ -132,15 +135,10 @@ function getGenerateQuizPrompt(
   ${optionalRequest ? `Additional request: ${optionalRequest}` : ""}`;
 }
 
-function getGenerateScriptPrompt(
-  title: string,
-  optionalRequest?: string,
-  numOfSlides: number = 10
-) {
+function getGenerateScriptPrompt(title: string, optionalRequest?: string) {
   return `
     Summarize the key points of the document and generate a script for a lecture in Vietnamese with the title "${title}". 
     The script should develop the main ideas with sufficient detail, but focus only on the most important points to maintain clarity and conciseness. 
-    The content should be structured logically and kept within the equivalent content of approximately ${numOfSlides} slides.
     The tone should be formal, suitable for an academic setting.
     ${optionalRequest ? `Additional request: ${optionalRequest}` : ""}
   `;
@@ -201,4 +199,61 @@ function getGenerateSlidesPrompt(
         "
         `;
   return prompt;
+}
+
+export async function convertToDocx(markdown: string) {
+  console.log("Converting to docx...");
+
+  const inputFilePath = join(tmpdir(), `script.md`);
+  const outputFilePath = join(tmpdir(), `script.docx`);
+
+  try {
+    await writeFile(inputFilePath, markdown);
+
+    await new Promise((resolve, reject) => {
+      exec(`pandoc ${inputFilePath} -o ${outputFilePath}`, (error, stdout) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(stdout);
+        }
+      });
+    });
+
+    // convert docx to base64
+    const docxBuffer = await readFile(outputFilePath);
+    const base64 = docxBuffer.toString("base64");
+    return base64;
+  } catch (error) {
+    console.error("Error converting markdown to DOCX:", error);
+    throw error;
+  }
+}
+
+export async function convertToPptx(markdown: string) {
+  console.log("Converting to pptx...");
+  const inputFilePath = join(tmpdir(), `slides.md`);
+  const outputFilePath = join(tmpdir(), `slides.pptx`);
+
+  try {
+    await writeFile(inputFilePath, markdown);
+
+    await new Promise((resolve, reject) => {
+      exec(`pandoc ${inputFilePath} -o ${outputFilePath}`, (error, stdout) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(stdout);
+        }
+      });
+    });
+
+    // convert pptx to base64
+    const pptxBuffer = await readFile(outputFilePath);
+    const base64 = pptxBuffer.toString("base64");
+    return base64;
+  } catch (error) {
+    console.error("Error converting markdown to PPTX:", error);
+    throw error;
+  }
 }

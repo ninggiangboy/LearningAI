@@ -62,6 +62,7 @@
     "next-themes": "^0.3.0",
     "node-html-parser": "^6.1.13",
     "openai": "^4.61.1",
+    "pandoc": "^0.2.0",
     "puppeteer": "^23.3.1",
     "react": "^18",
     "react-day-picker": "^8.10.1",
