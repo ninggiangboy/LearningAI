@@ -17,13 +17,11 @@ export default function Hero() {
                 Learning AI
               </h1>
               <p className="text-muted-foreground md:text-xl max-w-xl mx-auto">
-                Aenean eget massa pharetra, ullamcorper leo at, vestibulum ex.
-                Sed id elementum dui. Aenean urna dolor, consectetur sed purus
-                sit amet, iaculis fermentum dolor.
+                This AI-powered application will help you learn anything.
               </p>
             </div>
             <div className="flex flex-row items-center justify-center gap-2">
-              <Link href="/sign-up" passHref>
+              <Link href="/quiz" passHref>
                 <Button>Start it now!</Button>
               </Link>
             </div>

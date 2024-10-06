@@ -10,11 +10,11 @@ export default function Feature() {
               Key Features
             </div>
             <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
-              Curabitur vitae mi tristique.
+              Generate your own slides and quizzes.
             </h2>
             <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-              Vestibulum felis leo, sodales auctor iaculis maximus, fringilla a
-              nisi.
+              This AI-powered application allows you to create your own slides
+              and quizzes.
             </p>
           </div>
         </div>
@@ -23,32 +23,34 @@ export default function Feature() {
             <ul className="grid gap-6">
               <li>
                 <div className="grid gap-1">
-                  <h3 className="text-xl font-bold">Proin sed mollis orci.</h3>
+                  <h3 className="text-xl font-bold">
+                    Automatic Slide Creation
+                  </h3>
                   <p className="text-muted-foreground">
-                    Nullam accumsan et enim non condimentum. Nunc gravida
-                    condimentum augue nec congue.
+                    The app automatically converts text content into
+                    presentation slides with logical and visually appealing
+                    structures.
                   </p>
                 </div>
               </li>
               <li>
                 <div className="grid gap-1">
                   <h3 className="text-xl font-bold">
-                    Donec iaculis leo eu porta tristique.{" "}
+                    Interactive Question Generation
                   </h3>
                   <p className="text-muted-foreground">
-                    Cras ullamcorper vehicula auctor. Fusce aliquam sollicitudin
-                    neque, nec ultrices nulla porttitor quis.
+                    The AI system generates interactive questions from lecture
+                    content, enabling teachers to assess students&apos;
+                    understanding and knowledge.
                   </p>
                 </div>
               </li>
               <li>
                 <div className="grid gap-1">
-                  <h3 className="text-xl font-bold">
-                    Sed vestibulum ac quam eget ultricies.
-                  </h3>
+                  <h3 className="text-xl font-bold">User-friendly Interface</h3>
                   <p className="text-muted-foreground">
-                    Quisque faucibus ligula neque, quis porta libero sagittis
-                    vitae. Maecenas dignissim porttitor congue.
+                    The app has a user-friendly interface that allows you to
+                    easily create your own slides and quizzes.
                   </p>
                 </div>
               </li>
@@ -57,9 +59,9 @@ export default function Feature() {
           <Image
             src="/image.png"
             width="550"
-            height="310"
+            height="400"
             alt="Features"
-            className="mx-auto aspect-video overflow-hidden rounded-xl object-cover object-center sm:w-full lg:order-last"
+            className="mx-auto aspect-auto overflow-hidden rounded-xl object-cover object-center sm:w-full lg:order-last"
           />
         </div>
       </div>

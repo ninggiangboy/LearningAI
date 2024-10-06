@@ -30,13 +30,13 @@ const Navbar = () => {
       title: "Slides Generator",
       href: "/slides",
       description:
-        "For sighted users to preview content available behind a link.",
+        "Convert your lecture content into presentation slides with logical and visually appealing structures.",
     },
     {
       title: "Quiz Generator",
       href: "/quiz",
       description:
-        "For sighted users to preview content available behind a link.",
+        "Generate interactive quizzes from lecture content, enabling teachers to assess students' understanding and knowledge.",
     },
   ];
 

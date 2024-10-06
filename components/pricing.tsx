@@ -11,94 +11,87 @@ export default function Pricing() {
               Pricing
             </div>
             <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
-              Lorem ipsum dolor sit amet
+              Suitable for everyone
             </h2>
             <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+              Bring best value for your money.
             </p>
           </div>
         </div>
         <div className="mx-auto grid max-w-5xl items-center gap-4 py-12 lg:grid-cols-3 lg:gap-8">
           <Card className="flex flex-col justify-center space-y-4 rounded-lg bg-background p-6 shadow-sm">
             <div className="space-y-2">
-              <h3 className="text-2xl font-bold">Lorem Ipsum</h3>
-              <p className="text-4xl font-bold">$5/month</p>
-              <p className="text-muted-foreground">
-                Lorem ipsum dolor sit amet.
-              </p>
+              <h3 className="text-2xl font-bold">Basic</h3>
+              <p className="text-4xl font-bold">$5/mo</p>
             </div>
             <ul className="space-y-2 text-muted-foreground">
               <li className="flex items-center gap-2">
                 <CheckIcon className="w-4 h-4 text-green-500" />
-                <span>Lorem ipsum dolor sit amet</span>
+                <span>AI-generated slides</span>
               </li>
               <li className="flex items-center gap-2">
                 <CheckIcon className="w-4 h-4 text-green-500" />
-                <span>Consectetur adipiscing elit</span>
+                <span>AI-generated quizzes</span>
               </li>
               <li className="flex items-center gap-2">
                 <CheckIcon className="w-4 h-4 text-green-500" />
-                <span>Sed do eiusmod tempor</span>
+                <span>Email support</span>
               </li>
               <li className="flex items-center gap-2">
                 <XIcon className="w-4 h-4 text-red-500" />
-                <span>Ut enim ad minim veniam</span>
+                <span>Limited to 5 credits/day</span>
               </li>
             </ul>
-            <Button className="w-full">Lorem Ipsum</Button>
+            <Button className="w-full">Get started</Button>
           </Card>
           <Card className="flex flex-col justify-center space-y-4 rounded-lg bg-primary p-6 shadow-sm text-primary-foreground">
             <div className="space-y-2">
-              <h3 className="text-2xl font-bold">Dolor Sit Amet</h3>
+              <h3 className="text-2xl font-bold">Pro</h3>
               <p className="text-4xl font-bold">$10/mo</p>
-              <p className="text-primary-foreground/80">
-                Lorem ipsum dolor sit amet.
-              </p>
             </div>
             <ul className="space-y-2 text-primary-foreground/80">
               <li className="flex items-center gap-2">
-                <CheckIcon className="w-4 h-4" />
-                <span>Lorem ipsum dolor sit amet</span>
+                <CheckIcon className="w-4 h-4 text-green-500" />
+                <span>AI-generated slides</span>
               </li>
               <li className="flex items-center gap-2">
-                <CheckIcon className="w-4 h-4" />
-                <span>Consectetur adipiscing elit</span>
+                <CheckIcon className="w-4 h-4 text-green-500" />
+                <span>AI-generated quizzes</span>
               </li>
               <li className="flex items-center gap-2">
-                <CheckIcon className="w-4 h-4" />
-                <span>Sed do eiusmod tempor</span>
+                <CheckIcon className="w-4 h-4 text-green-500" />
+                <span>Email support</span>
               </li>
               <li className="flex items-center gap-2">
-                <CheckIcon className="w-4 h-4" />
-                <span>Ut enim ad minim veniam</span>
+                <CheckIcon className="w-4 h-4 text-green-500" />
+                <span>Up to 20 credits/day</span>
               </li>
             </ul>
             <Button className="w-full" variant="secondary">
-              Lorem Ipsum
+              Get started
             </Button>
           </Card>
           <Card className="flex flex-col justify-center space-y-4 rounded-lg bg-background p-6 shadow-sm">
             <div className="space-y-2">
-              <h3 className="text-2xl font-bold">Consectetur Adipiscing</h3>
+              <h3 className="text-2xl font-bold">Need more?</h3>
               <p className="text-4xl font-bold">Contact Us!</p>
-              <p className="">Lorem ipsum dolor sit amet.</p>
             </div>
             <ul className="space-y-2 text-muted-foreground">
               <li className="flex items-center gap-2">
                 <CheckIcon className="w-4 h-4 text-green-500" />
-                <span>Lorem ipsum dolor sit amet</span>
+                <span>AI-generated slides</span>
               </li>
               <li className="flex items-center gap-2">
                 <CheckIcon className="w-4 h-4 text-green-500" />
-                <span>Consectetur adipiscing elit</span>
+                <span>AI-generated quizzes</span>
               </li>
               <li className="flex items-center gap-2">
                 <CheckIcon className="w-4 h-4 text-green-500" />
-                <span>Sed do eiusmod tempor</span>
+                <span>Email support</span>
               </li>
               <li className="flex items-center gap-2">
                 <CheckIcon className="w-4 h-4 text-green-500" />
-                <span>Ut enim ad minim veniam</span>
+                <span>As much as you want</span>
               </li>
             </ul>
             <Button className="w-full">Lorem Ipsum</Button>
