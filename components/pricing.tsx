@@ -94,7 +94,7 @@ export default function Pricing() {
                 <span>As much as you want</span>
               </li>
             </ul>
-            <Button className="w-full">Lorem Ipsum</Button>
+            <Button className="w-full">Get started</Button>
           </Card>
         </div>
       </div>
