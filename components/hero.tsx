@@ -14,7 +14,7 @@ export default function Hero() {
           <div className="flex flex-col justify-center space-y-4">
             <div className="space-y-2 justify-center items-center">
               <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
-                Learning AI
+                LearningAI
               </h1>
               <p className="text-muted-foreground md:text-xl max-w-xl mx-auto">
                 This AI-powered application will help you learn anything.
