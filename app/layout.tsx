@@ -20,7 +20,6 @@ const geistMono = localFont({
 const title = "LearningAI";
 const description = "Generate learning resources with AI";
 const url = "https://www.learningai.io";
-const ogimage = "https://www.qrgpt.io/og-image.png";
 const sitename = "learningai.io";
 
 export const metadata: Metadata = {
@@ -31,7 +30,6 @@ export const metadata: Metadata = {
     icon: "/favicon.ico",
   },
   openGraph: {
-    images: [ogimage],
     title,
     description,
     url: url,
@@ -41,7 +39,6 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    images: [ogimage],
     title,
     description,
   },
