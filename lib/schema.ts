@@ -14,8 +14,8 @@ export const generateSlidesFormSchema = z.object({
       message: "Maximum 3 files are allowed",
     }),
   title: z.string().max(160),
-  prompt: z.string().max(160).optional(),
-  numOfSlides: z.number().min(4).max(20).optional(),
+  prompt: z.string().max(200).optional(),
+  numOfSlides: z.number().min(4).max(40).optional(),
 });
 
 export type GenerateSlidesFormValues = z.infer<typeof generateSlidesFormSchema>;

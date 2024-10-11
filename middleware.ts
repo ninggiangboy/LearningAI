@@ -4,6 +4,8 @@ const isProtectedRoute = createRouteMatcher(["/quiz(.*)", "/slides(.*)"]);
 
 export default clerkMiddleware((auth, req) => {
   // if (isProtectedRoute(req)) auth().protect();
+  const ip = req.ip ?? "127.0.0.1";
+  console.log(`[${new Date().toISOString()}] ${ip} ${req.method} ${req.url}`);
 });
 export const config = {
   matcher: [
