@@ -21,7 +21,7 @@ const FileSvgDraw = () => {
         &nbsp; or drag and drop
       </p>
       <p className="text-xs text-gray-500 dark:text-gray-400">
-        SVG, PNG, JPG or GIF
+        Image, PDF, plain text or audio up to 4MB each (max 3 files)
       </p>
     </>
   );

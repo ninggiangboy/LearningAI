@@ -3,9 +3,20 @@ import { z } from "zod";
 export const generateSlidesFormSchema = z.object({
   files: z
     .array(
-      z.instanceof(File).refine((file) => file.size < 2 * 1024 * 1024, {
-        message: "File size must be less than 4MB",
-      })
+      z
+        .instanceof(File)
+        .refine((file) => file.size < 2 * 1024 * 1024, {
+          message: "File size must be less than 4MB",
+        })
+        .refine(
+          (file) => {
+            const allowedTypes = ["image/", "application/pdf", "audio/"];
+            return allowedTypes.some((type) => file.type.startsWith(type));
+          },
+          {
+            message: "File type must be an image, PDF, or audio",
+          }
+        )
     )
     .min(1, {
       message: "At least 1 file is required",
