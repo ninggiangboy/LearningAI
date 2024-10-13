@@ -10,7 +10,12 @@ export const generateSlidesFormSchema = z.object({
         })
         .refine(
           (file) => {
-            const allowedTypes = ["image/", "application/pdf", "audio/"];
+            const allowedTypes = [
+              "image/",
+              "application/pdf",
+              "audio/",
+              "text/plain",
+            ];
             return allowedTypes.some((type) => file.type.startsWith(type));
           },
           {
