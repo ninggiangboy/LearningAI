@@ -3,9 +3,7 @@ import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 const isProtectedRoute = createRouteMatcher(["/quiz(.*)", "/slides(.*)"]);
 
 export default clerkMiddleware((auth, req) => {
-  // if (isProtectedRoute(req)) auth().protect();
-  const ip = req.ip ?? "127.0.0.1";
-  console.log(`[${new Date().toISOString()}] ${ip}`);
+  if (isProtectedRoute(req)) auth().protect();
 });
 export const config = {
   matcher: [
