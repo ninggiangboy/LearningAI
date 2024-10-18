@@ -3,7 +3,7 @@
 import { LoadingButton } from "@/components/extension/loading-button";
 import FormQuizPrompt from "@/components/form-quiz";
 import Quiz from "@/components/quiz";
-import { generateQuiz, getGenerateQuizPrompt, getKey } from "@/lib/actions";
+import { getGenerateQuizPrompt, getKey } from "@/lib/actions";
 import { generateQuizFormSchema } from "@/lib/schema";
 import { FileBase64, QuizOuput } from "@/lib/types";
 import { GoogleGenerativeAI } from "@google/generative-ai";

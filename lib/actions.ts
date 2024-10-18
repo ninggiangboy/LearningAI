@@ -27,7 +27,7 @@ export async function generateQuiz({
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
   const fileParts = files.map(fileToGenerativePart);
-  const quizPrompt = getGenerateQuizPrompt(
+  const quizPrompt = await getGenerateQuizPrompt(
     title,
     prompt,
     numOfQuiz,
