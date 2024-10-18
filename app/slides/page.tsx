@@ -8,19 +8,15 @@ import SlideArtcle from "@/components/slide-article";
 import {
   convertToDocx,
   convertToPptx,
-  generateScript,
   generateSlides,
+  getGenerateScriptPrompt,
+  getKey,
 } from "@/lib/actions";
 import { generateSlidesFormSchema } from "@/lib/schema";
 import { FileBase64 } from "@/lib/types";
 import ScriptArticle from "@/components/script-article";
 import FormSlidesPrompt from "@/components/form-prompt";
-// const promptSuggestions = [
-//   "A city view with clouds",
-//   "A beautiful glacier",
-//   "A forest overlooking a mountain",
-//   "A saharan desert",
-// ];
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export default function Slides() {
   const [isLoading, setIsLoading] = useState(false);
@@ -32,6 +28,8 @@ export default function Slides() {
     values: z.infer<typeof generateSlidesFormSchema>
   ) => {
     setError(null);
+    setScript(null);
+    setSlides(null);
     setIsLoading(true);
     try {
       const { files, ...otherValues } = values;
@@ -44,7 +42,6 @@ export default function Slides() {
         files: fileContents,
       });
       console.timeEnd("script");
-      setScript(scriptResponse);
       console.time("slides");
       const slidesResponse = await generateSlides({
         ...otherValues,
@@ -59,6 +56,64 @@ export default function Slides() {
       setIsLoading(false);
     }
   };
+
+  const generateScript = async ({
+    title,
+    prompt,
+    files,
+  }: {
+    title: string;
+    prompt?: string;
+    files: FileBase64[];
+  }) => {
+    const genAI = new GoogleGenerativeAI(await getKey());
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const fileParts = files.map(fileToGenerativePart);
+    const scriptPrompt = await getGenerateScriptPrompt(title, prompt);
+
+    const chat = model.startChat({
+      history: [],
+    });
+
+    const response = await chat.sendMessageStream([scriptPrompt, ...fileParts]);
+    let script = "";
+    for await (const chuck of response.stream) {
+      script += chuck.text();
+      setScript(script);
+    }
+    return script;
+  };
+
+  function fileToGenerativePart(file: FileBase64) {
+    return {
+      inlineData: {
+        data: file.data.replace(/^data:.*?;base64,/, ""),
+        mimeType: getFileMimeType(file.name),
+      },
+    };
+  }
+
+  function getFileMimeType(name: string) {
+    switch (name.split(".").pop()) {
+      case "pdf":
+        return "application/pdf";
+      case "doc":
+      case "docx":
+        return "application/vnd.ms-word";
+      case "ppt":
+      case "pptx":
+        return "application/vnd.ms-powerpoint";
+      case "xls":
+      case "xlsx":
+        return "application/vnd.ms-excel";
+      case "png":
+      case "jpg":
+      case "jpeg":
+        return "image/*";
+      default:
+        return "text/plain";
+    }
+  }
 
   const filesToBase64 = async (files: File[]) => {
     const data = await Promise.all(
@@ -106,7 +161,6 @@ export default function Slides() {
 
     try {
       const pptxContent = await convertToPptx(slides!);
-      console.log(pptxContent);
       const blob = new Blob([Buffer.from(pptxContent, "base64")], {
         type: "application/vnd.openxmlformats-officedocument.presentationml.presentation",
       });
@@ -148,25 +202,17 @@ export default function Slides() {
           )}
         </div>
         <div className="col-span-3">
-          {isLoading ? (
+          {isLoading && <div>Loading...</div>}
+          {slides && !isLoading && (
             <>
-              {!slides && <div>Loading slides...</div>}
-              {!script && <div>Loading script...</div>}
+              <h1 className="text-3xl font-bold mb-5">Slides</h1>
+              <SlideArtcle slidesRaw={slides} />
             </>
-          ) : (
+          )}
+          {script && (
             <>
-              {slides && (
-                <>
-                  <h1 className="text-3xl font-bold mb-5">Slides</h1>
-                  <SlideArtcle slidesRaw={slides} />
-                </>
-              )}
-              {script && (
-                <>
-                  <h1 className="text-3xl font-bold mb-5 mt-5">Script</h1>
-                  <ScriptArticle scriptRaw={script} />
-                </>
-              )}
+              <h1 className="text-3xl font-bold mb-5 mt-5">Script</h1>
+              <ScriptArticle scriptRaw={script} />
             </>
           )}
         </div>

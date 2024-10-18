@@ -9,7 +9,7 @@ const nextConfig = {
   experimental: {
     missingSuspenseWithCSRBailout: false,
     serverActions: {
-      bodySizeLimit: "3mb",
+      bodySizeLimit: "12mb",
     },
   },
 };

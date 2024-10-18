@@ -31,14 +31,14 @@ export default function FormSlidesPrompt({
   isLoading,
   error,
   onSubmit,
-}: {
+}: Readonly<{
   isLoading: boolean;
   error: string | null;
   onSubmit: (data: z.infer<typeof generateSlidesFormSchema>) => void;
-}) {
+}>) {
   const dropZoneConfig = {
     maxFiles: 3,
-    maxSize: 1024 * 1024 * 2,
+    maxSize: 1024 * 1024 * 4,
     multiple: true,
   };
   const form = useForm<GenerateSlidesFormValues>({

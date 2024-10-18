@@ -7,6 +7,10 @@ import { join } from "path";
 import { readFile, writeFile } from "fs/promises";
 import { tmpdir } from "os";
 
+export async function getKey() {
+  return process.env.GEMINI_API_KEY!;
+}
+
 export async function generateQuiz({
   title,
   prompt,
@@ -40,13 +44,12 @@ export async function generateScript({
 }: {
   title: string;
   prompt?: string;
-  // numOfSlides?: number;
   files: FileBase64[];
 }) {
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
   const fileParts = files.map(fileToGenerativePart);
-  const scriptPrompt = getGenerateScriptPrompt(title, prompt);
+  const scriptPrompt = await getGenerateScriptPrompt(title, prompt);
   const result = await model.generateContent([scriptPrompt, ...fileParts]);
   return result.response.text();
 }
@@ -135,11 +138,17 @@ function getGenerateQuizPrompt(
   ${optionalRequest ? `Additional request: ${optionalRequest}` : ""}`;
 }
 
-function getGenerateScriptPrompt(title: string, optionalRequest?: string) {
+export async function getGenerateScriptPrompt(
+  title: string,
+  optionalRequest?: string,
+  language: string = "vietnamese"
+) {
   return `
-    Summarize the key points of the document and generate a script for a lecture in Vietnamese with the title "${title}". 
-    The script should develop the main ideas with sufficient detail, but focus only on the most important points to maintain clarity and conciseness. 
+    Read all of files and find the part of ${title} of the document and generate a script for a lecture in ${language}. 
+    You should give all information that you can find in the document, and make sure this information as detailed as possible but not include any external information or knowledge.
+    Please use the entire text founded of this document, including all sections, without any summary but you can make the content easy to understands (but must keep 100% of infomation).
     The tone should be formal, suitable for an academic setting.
+    Format the script like a lecture, but don't include any introductory text like 'Here is the answer.' or 'Hello, everyone.'
     ${optionalRequest ? `Additional request: ${optionalRequest}` : ""}
   `;
 }

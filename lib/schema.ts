@@ -5,7 +5,7 @@ export const generateSlidesFormSchema = z.object({
     .array(
       z
         .instanceof(File)
-        .refine((file) => file.size < 2 * 1024 * 1024, {
+        .refine((file) => file.size < 4 * 1024 * 1024, {
           message: "File size must be less than 4MB",
         })
         .refine(
@@ -39,9 +39,25 @@ export type GenerateSlidesFormValues = z.infer<typeof generateSlidesFormSchema>;
 export const generateQuizFormSchema = z.object({
   files: z
     .array(
-      z.instanceof(File).refine((file) => file.size < 2 * 1024 * 1024, {
-        message: "File size must be less than 4MB",
-      })
+      z
+        .instanceof(File)
+        .refine((file) => file.size < 4 * 1024 * 1024, {
+          message: "File size must be less than 4MB",
+        })
+        .refine(
+          (file) => {
+            const allowedTypes = [
+              "image/",
+              "application/pdf",
+              "audio/",
+              "text/plain",
+            ];
+            return allowedTypes.some((type) => file.type.startsWith(type));
+          },
+          {
+            message: "File type must be an image, PDF, or audio",
+          }
+        )
     )
     .min(1, {
       message: "At least 1 file is required",

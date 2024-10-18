@@ -4,7 +4,6 @@ import { Separator } from "@radix-ui/react-context-menu";
 
 export default function QuizDisplay({ data }: { data: QuizOuput[] }) {
   const dataArray = Array.isArray(data) ? data : [];
-  console.table(data);
   return (
     <div className="flex flex-col space-y-6">
       {dataArray.map((quiz, index) => (

@@ -42,7 +42,7 @@ export default function FormQuizPrompt({
 }) {
   const dropZoneConfig = {
     maxFiles: 3,
-    maxSize: 1024 * 1024 * 2,
+    maxSize: 1024 * 1024 * 12,
     multiple: true,
   };
   const form = useForm<GenerateQuizFormValues>({
