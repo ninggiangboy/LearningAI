@@ -3,9 +3,10 @@
 import { LoadingButton } from "@/components/extension/loading-button";
 import FormQuizPrompt from "@/components/form-quiz";
 import Quiz from "@/components/quiz";
-import { generateQuiz } from "@/lib/actions";
+import { generateQuiz, getGenerateQuizPrompt, getKey } from "@/lib/actions";
 import { generateQuizFormSchema } from "@/lib/schema";
 import { FileBase64, QuizOuput } from "@/lib/types";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Download } from "lucide-react";
 import { useState } from "react";
 import { z } from "zod";
@@ -36,6 +37,63 @@ export default function QuizPage() {
       setIsLoading(false);
     }
   };
+
+  async function generateQuiz({
+    title,
+    prompt,
+    numOfQuiz,
+    typeOfQuiz,
+    files,
+  }: {
+    title: string;
+    prompt?: string;
+    numOfQuiz?: number;
+    typeOfQuiz: "multiple_choice" | "true_false" | "both";
+    files: FileBase64[];
+  }) {
+    const genAI = new GoogleGenerativeAI(await getKey());
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const fileParts = files.map(fileToGenerativePart);
+    const quizPrompt = await getGenerateQuizPrompt(
+      title,
+      prompt,
+      numOfQuiz,
+      typeOfQuiz
+    );
+    const result = await model.generateContent([quizPrompt, ...fileParts]);
+    return JSON.parse(result.response.text()) as QuizOuput[];
+  }
+
+  function fileToGenerativePart(file: FileBase64) {
+    return {
+      inlineData: {
+        data: file.data.replace(/^data:.*?;base64,/, ""),
+        mimeType: getFileMimeType(file.name),
+      },
+    };
+  }
+
+  function getFileMimeType(name: string) {
+    switch (name.split(".").pop()) {
+      case "pdf":
+        return "application/pdf";
+      case "doc":
+      case "docx":
+        return "application/vnd.ms-word";
+      case "ppt":
+      case "pptx":
+        return "application/vnd.ms-powerpoint";
+      case "xls":
+      case "xlsx":
+        return "application/vnd.ms-excel";
+      case "png":
+      case "jpg":
+      case "jpeg":
+        return "image/*";
+      default:
+        return "text/plain";
+    }
+  }
 
   const filesToBase64 = async (files: File[]) => {
     const data = await Promise.all(

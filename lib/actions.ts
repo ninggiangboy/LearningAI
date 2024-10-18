@@ -109,7 +109,7 @@ function getFileMimeType(name: string) {
   }
 }
 
-function getGenerateQuizPrompt(
+export async function getGenerateQuizPrompt(
   title: string,
   optionalRequest?: string,
   numOfQuiz: number = 30,
