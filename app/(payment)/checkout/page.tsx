@@ -24,14 +24,14 @@ export default function Payment({
   switch (searchParams.service) {
     case "basic":
       planInfo = {
-        name: "Basic",
+        name: "Plus",
         price: 5,
         feature: "Up to 5 credits/day",
       };
       break;
     case "pro":
       planInfo = {
-        name: "Pro",
+        name: "Premium",
         price: 10,
         feature: "Up to 20 credits/day",
       };

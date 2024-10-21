@@ -23,7 +23,7 @@ export default function Pricing() {
         <div className="mx-auto grid max-w-5xl items-center gap-4 py-12 lg:grid-cols-3 lg:gap-8">
           <Card className="flex flex-col justify-center space-y-4 rounded-lg bg-background p-6 shadow-sm">
             <div className="space-y-2">
-              <h3 className="text-2xl font-bold">Basic</h3>
+              <h3 className="text-2xl font-bold">Plus</h3>
               <p className="text-4xl font-bold">$5/mo</p>
             </div>
             <ul className="space-y-2 text-muted-foreground">
@@ -50,7 +50,7 @@ export default function Pricing() {
           </Card>
           <Card className="flex flex-col justify-center space-y-4 rounded-lg bg-primary p-6 shadow-sm text-primary-foreground">
             <div className="space-y-2">
-              <h3 className="text-2xl font-bold">Pro</h3>
+              <h3 className="text-2xl font-bold">Premium</h3>
               <p className="text-4xl font-bold">$10/mo</p>
             </div>
             <ul className="space-y-2 text-primary-foreground/80">
