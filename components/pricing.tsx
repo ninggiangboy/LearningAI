@@ -1,5 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "./ui/card";
+import Link from "next/link";
+import { CheckIcon, XIcon } from "./icons";
 
 export default function Pricing() {
   return (
@@ -42,7 +44,9 @@ export default function Pricing() {
                 <span>Limited to 5 credits/day</span>
               </li>
             </ul>
-            <Button className="w-full">Get started</Button>
+            <Link href="/checkout?service=basic">
+              <Button className="w-full">Get started</Button>
+            </Link>
           </Card>
           <Card className="flex flex-col justify-center space-y-4 rounded-lg bg-primary p-6 shadow-sm text-primary-foreground">
             <div className="space-y-2">
@@ -67,9 +71,11 @@ export default function Pricing() {
                 <span>Up to 20 credits/day</span>
               </li>
             </ul>
-            <Button className="w-full" variant="secondary">
-              Get started
-            </Button>
+            <Link href="/checkout?service=pro">
+              <Button className="w-full" variant="secondary">
+                Get started
+              </Button>
+            </Link>
           </Card>
           <Card className="flex flex-col justify-center space-y-4 rounded-lg bg-background p-6 shadow-sm">
             <div className="space-y-2">
@@ -99,44 +105,5 @@ export default function Pricing() {
         </div>
       </div>
     </section>
-  );
-}
-
-function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M20 6 9 17l-5-5" />
-    </svg>
-  );
-}
-
-function XIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M18 6 6 18" />
-      <path d="m6 6 12 12" />
-    </svg>
   );
 }

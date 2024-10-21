@@ -6,6 +6,16 @@ const nextConfig = {
     // your project has ESLint errors.
     ignoreDuringBuilds: true,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "qr.sepay.vn",
+        port: "",
+        pathname: "/img/**",
+      },
+    ],
+  },
   experimental: {
     missingSuspenseWithCSRBailout: false,
     serverActions: {
