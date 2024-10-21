@@ -1,20 +1,20 @@
 "use client";
 
-import { CheckIcon, XIcon } from "@/components/icons";
+import { CheckIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { CheckCircle, LoaderCircle, SplineIcon } from "lucide-react";
+import { LoaderCircle } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 
 export default function Payment({
   searchParams,
-}: {
+}: Readonly<{
   searchParams: {
     service: "basic" | "pro";
   };
-}) {
+}>) {
   const [isPaid, setIsPaid] = useState(false);
   useEffect(() => {
     const interval = setInterval(checkPaymentStatus, 1000);
@@ -37,8 +37,6 @@ export default function Payment({
       };
       break;
   }
-  const handleSubmit = async (e) => {};
-
   const checkPaymentStatus = async () => {
     if (!isPaid) {
       // const response = await fetch("/api/checkPaymentStatus", {
